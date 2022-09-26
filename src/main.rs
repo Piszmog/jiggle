@@ -22,25 +22,26 @@ struct Args {
 fn main() {
     let args: Args = Args::parse();
 
+    let repo_dir = args.dir.as_str();
     let mut previous_branch = "";
     args.tree.split('>').for_each(|branch| {
         println!("Checking out {:?}...", branch);
-        checkout("/Users/randell/Documents/dev/sourcegraph", branch);
+        checkout(repo_dir, branch);
 
         println!("Pulling latest {:?}...", branch);
-        pull("/Users/randell/Documents/dev/sourcegraph");
+        pull(repo_dir);
 
         if !previous_branch.is_empty() {
-            let up_to_date = is_up_to_date("/Users/randell/Documents/dev/sourcegraph", previous_branch);
+            let up_to_date = is_up_to_date(repo_dir, previous_branch);
 
             if !up_to_date {
-                let has_conflicts = has_conflicts("/Users/randell/Documents/dev/sourcegraph", "main");
+                let has_conflicts = has_conflicts(repo_dir, "main");
                 if !has_conflicts {
                     println!("Merging {:?} into {:?}...", previous_branch, branch);
-                    merge("/Users/randell/Documents/dev/sourcegraph", previous_branch);
+                    merge(repo_dir, previous_branch);
 
                     println!("Pushing updated {:?}...", branch);
-                    push("/Users/randell/Documents/dev/sourcegraph");
+                    push(repo_dir);
                 } else {
                     println!("There are merge conflicts between {:?} and {:?}. Manually resolve before running again.", previous_branch, branch)
                 }
