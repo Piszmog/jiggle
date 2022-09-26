@@ -1,6 +1,6 @@
 use std::process::{Command, Stdio};
 
-/// TODO
+/// Checkouts the specified branch.
 pub fn checkout(repo_dir: &str, branch: &str) {
     Command::new("git")
         .arg("-C")
@@ -13,7 +13,8 @@ pub fn checkout(repo_dir: &str, branch: &str) {
         .unwrap();
 }
 
-/// TODO
+/// Determines if the current checked out branch will have any conflicts when merging the
+/// specified branch.
 pub fn has_conflicts(repo_dir: &str, from_branch: &str) -> bool {
     let output = Command::new("git")
         .arg("-C")
@@ -56,7 +57,7 @@ fn abort_merge(repo_dir: &str) {
         .unwrap();
 }
 
-/// TODO
+/// Determines if the current checked out branch has the latest code from the specified branch.
 pub fn is_up_to_date(repo_dir: &str, from_branch: &str) -> bool {
     let output = Command::new("git")
         .arg("-C")
@@ -108,7 +109,7 @@ fn get_current_branch(repo_dir: &str) -> String {
     String::from_utf8(output.stdout).unwrap().strip_suffix('\n').unwrap().to_string()
 }
 
-/// TODO
+/// Merges the specified branch into the current checked out branch.
 pub fn merge(repo_dir: &str, from_branch: &str) {
     Command::new("git")
         .arg("-C")
@@ -122,7 +123,7 @@ pub fn merge(repo_dir: &str, from_branch: &str) {
         .unwrap();
 }
 
-/// TODO
+/// Pulls the latest code into the current checked out branch.
 pub fn pull(repo_dir: &str) {
     Command::new("git")
         .arg("-C")
@@ -134,7 +135,7 @@ pub fn pull(repo_dir: &str) {
         .unwrap();
 }
 
-/// TODO
+/// Pushes the current checked out branch to remote.
 pub fn push(repo_dir: &str) {
     Command::new("git")
         .arg("-C")
