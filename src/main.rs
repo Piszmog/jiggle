@@ -1,5 +1,3 @@
-use std::env;
-
 use clap::Parser;
 
 use crate::git::{branch_exists, checkout, has_conflicts, is_up_to_date, merge, pull, push};
