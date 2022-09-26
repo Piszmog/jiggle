@@ -1,5 +1,21 @@
 use std::process::{Command, Stdio};
 
+/// Determines if the specified branch exists.
+pub fn branch_exists(repo_dir: &str, branch: &str) -> bool {
+    let output = Command::new("git")
+        .arg("-C")
+        .arg(repo_dir)
+        .arg("show-branch")
+        .arg(branch)
+        .stdout(Stdio::null())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("failed to check if branch exists")
+        .wait_with_output()
+        .unwrap();
+    String::from_utf8(output.stderr).unwrap().is_empty()
+}
+
 /// Checkouts the specified branch.
 pub fn checkout(repo_dir: &str, branch: &str) {
     Command::new("git")
@@ -7,6 +23,8 @@ pub fn checkout(repo_dir: &str, branch: &str) {
         .arg(repo_dir)
         .arg("checkout")
         .arg(branch)
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()
         .expect("failed to checkout branch")
         .wait()
@@ -51,6 +69,8 @@ fn abort_merge(repo_dir: &str) {
         .arg(repo_dir)
         .arg("merge")
         .arg("--abort")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()
         .expect("failed to abort merge")
         .wait()
@@ -117,6 +137,8 @@ pub fn merge(repo_dir: &str, from_branch: &str) {
         .arg("merge")
         .arg(from_branch)
         .arg("--no-edit")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()
         .expect("failed to merge root")
         .wait()
@@ -129,6 +151,8 @@ pub fn pull(repo_dir: &str) {
         .arg("-C")
         .arg(repo_dir)
         .arg("pull")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()
         .expect("failed to pull latest")
         .wait()
@@ -141,6 +165,8 @@ pub fn push(repo_dir: &str) {
         .arg("-C")
         .arg(repo_dir)
         .arg("push")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()
         .expect("failed to push updated code")
         .wait()

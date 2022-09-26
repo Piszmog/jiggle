@@ -2,7 +2,7 @@ use std::env;
 
 use clap::Parser;
 
-use crate::git::{checkout, has_conflicts, is_up_to_date, merge, pull, push};
+use crate::git::{branch_exists, checkout, has_conflicts, is_up_to_date, merge, pull, push};
 
 mod git;
 
@@ -24,7 +24,13 @@ fn main() {
 
     let repo_dir = args.dir.as_str();
     let mut previous_branch = "";
-    args.tree.split('>').for_each(|branch| {
+    for branch in args.tree.split('>') {
+        let exists = branch_exists(repo_dir, branch);
+        if !exists {
+            println!("Branch {:?} does not exist. Exiting...", branch);
+            return;
+        }
+
         println!("Checking out {:?}...", branch);
         checkout(repo_dir, branch);
 
@@ -50,6 +56,6 @@ fn main() {
             }
         }
         previous_branch = branch;
-    });
-    println!("All branches up-to-date!")
+    };
+    println!("All branches up-to-date!");
 }
