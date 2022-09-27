@@ -39,30 +39,30 @@ jobs:
       RUST_BACKTRACE: 1
     strategy:
       matrix:
-        build: [ linux, linux-arm, macos, win-msvc, win-gnu, win32-msvc ]
+        build: [ linux, linux-arm, macos, win-msvc, win32-msvc ]
         include:
-          - build: linux
-            os: ubuntu-18.04
+          - build: linux_x86_64
+            os: ubuntu-latest
             rust: nightly
             target: x86_64-unknown-linux-musl
-          - build: linux-arm
-            os: ubuntu-18.04
+          - build: linux_arm64
+            os: ubuntu-latest
             rust: nightly
             target: arm-unknown-linux-gnueabihf
-          - build: macos
+          - build: macos_x86_64
             os: macos-latest
             rust: nightly
             target: x86_64-apple-darwin
-          - build: win-msvc
-            os: windows-2019
+          - build: macos_arm64
+            os: macos-latest
+            rust: nightly
+            target: aarch64-apple-darwin
+          - build: windows_x86_64
+            os: windows-latest
             rust: nightly
             target: x86_64-pc-windows-msvc
-          - build: win-gnu
-            os: windows-2019
-            rust: nightly-x86_64-gnu
-            target: x86_64-pc-windows-gnu
-          - build: win32-msvc
-            os: windows-2019
+          - build: win32_i686-pc
+            os: windows-latest
             rust: nightly
             target: i686-pc-windows-msvc
 
@@ -96,10 +96,10 @@ jobs:
       - name: Build archive
         shell: bash
         run: |
-          staging="jiggle-${{ github.event.inputs.version }}-${{ matrix.target }}"
-          mkdir -p "$staging"/{complete,doc}
+          staging="jiggle-${{ github.event.inputs.version }}-${{ matrix.build }}"
+          mkdir -p "$staging"/
           cp {README.md,LICENSE} "$staging/"
-          if [ "${{ matrix.os }}" = "windows-2019" ]; then
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
             cp "target/${{ matrix.target }}/release/jiggle.exe" "$staging/"
             7z a "$staging.zip" "$staging"
             echo "ASSET=$staging.zip" >> $GITHUB_ENV
