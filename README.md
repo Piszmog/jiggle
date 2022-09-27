@@ -33,7 +33,7 @@ Head over to [Releases](https://github.com/Piszmog/jiggle/releases) and download
 ## Usage
 
 ```shell
-$ ./jiggle -d /path/to/repo/or/directory/of/repos -t "main>branch-1>branch-2>branch-3"
+$ ./jiggle -d /path/to/repo -t "main>branch-1>branch-2>branch-3"
 ```
 
 ### Options
