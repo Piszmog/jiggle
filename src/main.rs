@@ -39,7 +39,7 @@ fn main() {
             let up_to_date = is_up_to_date(repo_dir, previous_branch);
 
             if !up_to_date {
-                let has_conflicts = has_conflicts(repo_dir, "main");
+                let has_conflicts = has_conflicts(repo_dir, previous_branch);
                 if !has_conflicts {
                     println!("Merging {:?} into {:?}...", previous_branch, branch);
                     merge(repo_dir, previous_branch);
