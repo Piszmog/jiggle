@@ -93,27 +93,21 @@ jobs:
       - name: Build release binary
         run: ${{ env.CARGO }} build --release ${{ env.TARGET_FLAGS }}
 
-#      - name: Build archive
-#        shell: bash
-#        run: |
-#          outdir="$(ci/cargo-out-dir "${{ env.TARGET_DIR }}")"
-#          staging="jiggle-${{ github.event.inputs.version }}-${{ matrix.target }}"
-#          mkdir -p "$staging"/{complete,doc}
-#          cp {README.md,COPYING,UNLICENSE,LICENSE-MIT} "$staging/"
-#          cp {CHANGELOG.md,FAQ.md,GUIDE.md} "$staging/doc/"
-#          cp "$outdir"/{jiggle.bash,jiggle.fish,_jiggle.ps1} "$staging/complete/"
-#          cp complete/_jiggle "$staging/complete/"
-#          if [ "${{ matrix.os }}" = "windows-2019" ]; then
-#            cp "target/${{ matrix.target }}/release/jiggle.exe" "$staging/"
-#            7z a "$staging.zip" "$staging"
-#            echo "ASSET=$staging.zip" >> $GITHUB_ENV
-#          else
-#            # The man page is only generated on Unix systems. ¯\_(ツ)_/¯
-#            cp "$outdir"/jiggle.1 "$staging/doc/"
-#            cp "target/${{ matrix.target }}/release/jiggle" "$staging/"
-#            tar czf "$staging.tar.gz" "$staging"
-#            echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
-#          fi
+      - name: Build archive
+        shell: bash
+        run: |
+          staging="jiggle-${{ github.event.inputs.version }}-${{ matrix.target }}"
+          mkdir -p "$staging"/{complete,doc}
+          cp {README.md,LICENSE} "$staging/"
+          if [ "${{ matrix.os }}" = "windows-2019" ]; then
+            cp "target/${{ matrix.target }}/release/jiggle.exe" "$staging/"
+            7z a "$staging.zip" "$staging"
+            echo "ASSET=$staging.zip" >> $GITHUB_ENV
+          else
+            cp "target/${{ matrix.target }}/release/jiggle" "$staging/"
+            tar czf "$staging.tar.gz" "$staging"
+            echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
+          fi
       - name: Upload release archive
         uses: actions/upload-release-asset@v1
         env:
