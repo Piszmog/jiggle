@@ -47,10 +47,11 @@ fn main() {
                     println!("Pushing updated {:?}...", branch);
                     push(repo_dir);
                 } else {
-                    println!("There are merge conflicts between {:?} and {:?}. Manually resolve before running again.", previous_branch, branch)
+                    println!("There are merge conflicts between {:?} and {:?}. Manually resolve before running again.", previous_branch, branch);
+                    return;
                 }
             } else {
-                println!("{:?} is up-to-date with {:?}", branch, previous_branch)
+                println!("{:?} is up-to-date with {:?}", branch, previous_branch);
             }
         }
         previous_branch = branch;
