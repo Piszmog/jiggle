@@ -12,4 +12,4 @@ lto = true
 codegen-units = 1
 
 [dependencies]
-clap = { version = "4.0.13", features = ["derive"] }
+clap = { version = "4.1.1", features = ["derive"] }
